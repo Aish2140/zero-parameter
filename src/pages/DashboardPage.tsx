@@ -134,16 +134,26 @@ export function DashboardPage() {
         {statCards.map((card, i) => {
           const Icon = card.icon;
           return (
-            <div key={i} className="stat-card" style={{ animationDelay: `${i * 50}ms` }}>
-              <div className="flex items-start justify-between">
+            <div 
+              key={i} 
+              className="stat-card relative overflow-hidden group" 
+              style={{ animationDelay: `${i * 50}ms` }}
+            >
+              <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-white/5 to-transparent rounded-bl-full -mr-16 -mt-16 transition-transform duration-500 group-hover:scale-110`} />
+              
+              <div className="relative flex items-start justify-between z-10">
                 <div>
-                  <p className="text-xs text-gray-500 mb-1">{card.label}</p>
-                  <p className="text-2xl font-bold text-gray-100">{card.value}</p>
+                  <p className="text-sm font-medium text-gray-400 mb-1">{card.label}</p>
+                  <p className="text-3xl font-bold tracking-tight text-white group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-gray-300 transition-all duration-300">
+                    {card.value.toLocaleString()}
+                  </p>
                 </div>
-                <div className={`w-10 h-10 rounded-lg ${card.bg} flex items-center justify-center`}>
-                  <Icon size={20} className={card.color} />
+                <div className={`w-12 h-12 rounded-xl ${card.bg} flex items-center justify-center shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-3`}>
+                  <Icon size={24} className={card.color} />
                 </div>
               </div>
+              
+              <div className="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-current to-transparent opacity-0 group-hover:opacity-20 transition-opacity duration-300" style={{ color: 'var(--tw-colors-accent-500)' }} />
             </div>
           );
         })}
@@ -152,52 +162,73 @@ export function DashboardPage() {
       {/* Charts row */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Risk distribution */}
-        <div className="card p-6">
-          <h3 className="text-sm font-semibold text-gray-200 mb-4">Risk Distribution</h3>
-          <div className="flex justify-center py-4">
-            <DonutChart
-              data={[
-                { label: 'Low Risk', value: stats.lowRisk, color: '#22c55e' },
-                { label: 'Medium Risk', value: stats.mediumRisk, color: '#eab308' },
-                { label: 'High Risk', value: stats.highRisk, color: '#ef4444' },
-              ]}
-              centerLabel="Total"
-              centerValue={stats.totalRequests}
-            />
+        <div className="card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-accent-500/5 rounded-full blur-3xl -mr-32 -mt-32 transition-transform duration-700 group-hover:scale-150" />
+          <div className="relative p-6 z-10">
+            <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-accent-500 rounded-full" />
+              Risk Distribution
+            </h3>
+            <div className="flex justify-center py-4">
+              <DonutChart
+                data={[
+                  { label: 'Low Risk', value: stats.lowRisk, color: '#22c55e' },
+                  { label: 'Medium Risk', value: stats.mediumRisk, color: '#eab308' },
+                  { label: 'High Risk', value: stats.highRisk, color: '#ef4444' },
+                ]}
+                centerLabel="Total"
+                centerValue={stats.totalRequests}
+              />
+            </div>
           </div>
         </div>
 
         {/* Department-wise */}
-        <div className="card p-6">
-          <h3 className="text-sm font-semibold text-gray-200 mb-4">Department-wise Access Requests</h3>
-          {deptData.length > 0 ? (
-            <BarChart data={deptData} height={220} />
-          ) : (
-            <p className="text-gray-500 text-sm text-center py-12">No data available</p>
-          )}
+        <div className="card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-blue-500/5 rounded-full blur-3xl -mr-32 -mt-32 transition-transform duration-700 group-hover:scale-150" />
+          <div className="relative p-6 z-10">
+            <h3 className="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-blue-500 rounded-full" />
+              Department-wise Access
+            </h3>
+            {deptData.length > 0 ? (
+              <BarChart data={deptData} height={220} />
+            ) : (
+              <p className="text-gray-500 text-sm text-center py-12">No data available</p>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Trend + Alerts */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="card p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingUp size={16} className="text-accent-400" />
-            <h3 className="text-sm font-semibold text-gray-200">Access Request Trends</h3>
+        <div className="card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-accent-500/5 rounded-full blur-3xl -mr-32 -mt-32 transition-transform duration-700 group-hover:scale-150" />
+          <div className="relative p-6 z-10">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-8 h-8 rounded-lg bg-accent-500/20 flex items-center justify-center">
+                <TrendingUp size={18} className="text-accent-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white">Access Request Trends</h3>
+            </div>
+            {trendData.length > 0 ? (
+              <LineChart data={trendData} height={200} />
+            ) : (
+              <p className="text-gray-500 text-sm text-center py-12">No trend data</p>
+            )}
           </div>
-          {trendData.length > 0 ? (
-            <LineChart data={trendData} height={200} />
-          ) : (
-            <p className="text-gray-500 text-sm text-center py-12">No trend data</p>
-          )}
         </div>
 
-        <div className="card p-6">
-          <div className="flex items-center gap-2 mb-4">
-            <AlertTriangle size={16} className="text-danger-400" />
-            <h3 className="text-sm font-semibold text-gray-200">Recent Suspicious Activities</h3>
-          </div>
-          <div className="space-y-2 max-h-[200px] overflow-y-auto">
+        <div className="card relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-64 h-64 bg-danger-500/5 rounded-full blur-3xl -mr-32 -mt-32 transition-transform duration-700 group-hover:scale-150" />
+          <div className="relative p-6 z-10">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-8 h-8 rounded-lg bg-danger-500/20 flex items-center justify-center">
+                <AlertTriangle size={18} className="text-danger-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-white">Recent Suspicious Activities</h3>
+            </div>
+            <div className="space-y-3 max-h-[220px] overflow-y-auto pr-2 custom-scrollbar">
             {recentAlerts.length === 0 ? (
               <p className="text-gray-500 text-sm text-center py-8">No suspicious activities detected</p>
             ) : (
@@ -219,6 +250,7 @@ export function DashboardPage() {
                 </div>
               ))
             )}
+          </div>
           </div>
         </div>
       </div>

@@ -333,7 +333,7 @@ export function UserManagementPage() {
               <DetailItem icon={Building2} label="Department" value={viewUser.department_name || 'N/A'} />
               <DetailItem icon={Users} label="Role" value={viewUser.role} />
               <DetailItem icon={Mail} label="Email" value={viewUser.email} />
-              <DetailItem icon={Clock} label="Working Hours" value={`${viewUser.normal_start_hour}:00 - ${viewUser.normal_end_hour}:00`} />
+              <DetailItem icon={Clock} label="Working Hours" value={`${String(viewUser.normal_start_hour).padStart(2, '0')}:00 - ${String(viewUser.normal_end_hour).padStart(2, '0')}:00`} />
               <DetailItem icon={MapPin} label="Normal Location" value={viewUser.normal_location} />
             </div>
           </div>

@@ -211,7 +211,7 @@ export function AccessEvaluationPage() {
         ['Device', evalContext.device?.device_name || 'No device selected'],
         ['Application', evalContext.app.name + ' — ' + evalContext.app.sensitivity_level],
         ['Login Location', evalContext.location],
-        ['Access Hour', `${evalContext.accessHour}:00`],
+        ['Access Hour', `${String(evalContext.accessHour).padStart(2, '0')}:00`],
         ['Biometric', evalContext.biometricStatus],
       ];
 
