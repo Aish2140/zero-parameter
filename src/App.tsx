@@ -11,6 +11,7 @@ import { AccessEvaluationPage } from './pages/AccessEvaluationPage';
 import { MonitoringPage } from './pages/MonitoringPage';
 import { AccessLogsPage } from './pages/AccessLogsPage';
 import { AIModelPage } from './pages/AIModelPage';
+import { USBMonitorPage } from './pages/USBMonitorPage';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Toaster } from 'react-hot-toast';
 
@@ -37,6 +38,7 @@ function AppContent() {
           {page === 'applications' && <ApplicationManagementPage />}
           {page === 'access-evaluation' && <AccessEvaluationPage />}
           {page === 'monitoring' && <MonitoringPage />}
+          {page === 'usb-monitor' && <USBMonitorPage />}
           {page === 'logs' && <AccessLogsPage />}
           {page === 'ai-model' && <AIModelPage />}
         </motion.div>

@@ -10,6 +10,7 @@ import {
   Ban,
   TrendingUp,
   AlertTriangle,
+  Usb,
 } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import type { AccessLog } from '../types';
@@ -43,20 +44,30 @@ export function DashboardPage() {
   const [recentAlerts, setRecentAlerts] = useState<AccessLog[]>([]);
   const [recentRequests, setRecentRequests] = useState<AccessLog[]>([]);
   const [loading, setLoading] = useState(true);
+  const [usbStats, setUsbStats] = useState({ authorized: 0, unauthorized: 0, lastDevice: '' });
 
   useEffect(() => {
     loadDashboard();
   }, []);
 
   async function loadDashboard() {
-    const [usersRes, devicesRes, appsRes, logsRes] = await Promise.all([
+    const [usersRes, devicesRes, appsRes, logsRes, usbRes] = await Promise.all([
       supabase.from('users').select('*', { count: 'exact', head: true }),
       supabase.from('devices').select('*', { count: 'exact', head: true }),
       supabase.from('applications').select('*', { count: 'exact', head: true }),
       supabase.from('access_logs').select('*').order('created_at', { ascending: false }).limit(200),
+      supabase.from('usb_logs').select('decision,device_name,connection_time').order('connection_time', { ascending: false }).limit(100),
     ]);
 
     const logs = logsRes.data || [];
+    const usbLogs = usbRes.data || [];
+    const usbAuthorized = usbLogs.filter((u) => u.decision === 'Authorized').length;
+    const usbUnauthorized = usbLogs.filter((u) => u.decision !== 'Authorized').length;
+    setUsbStats({
+      authorized: usbAuthorized,
+      unauthorized: usbUnauthorized,
+      lastDevice: usbLogs[0]?.device_name || '',
+    });
     const lowRisk = logs.filter((l) => l.risk_level === 'Low').length;
     const mediumRisk = logs.filter((l) => l.risk_level === 'Medium').length;
     const highRisk = logs.filter((l) => l.risk_level === 'High').length;
@@ -284,6 +295,32 @@ export function DashboardPage() {
               ))}
             </tbody>
           </table>
+        </div>
+      </div>
+      {/* USB Security widget */}
+      <div className="card p-6">
+        <div className="flex items-center gap-3 mb-5">
+          <div className="w-8 h-8 rounded-lg bg-accent-500/20 flex items-center justify-center">
+            <Usb size={18} className="text-accent-400" />
+          </div>
+          <div>
+            <h3 className="text-sm font-semibold text-gray-200">USB Device Security</h3>
+            <p className="text-xs text-gray-500">Real-time USB connection monitoring &amp; Zero Trust evaluation</p>
+          </div>
+        </div>
+        <div className="grid grid-cols-3 gap-4">
+          <div className="p-4 rounded-xl bg-success-500/5 border border-success-500/20 text-center">
+            <p className="text-2xl font-bold text-success-400">{usbStats.authorized}</p>
+            <p className="text-xs text-gray-500 mt-1">Authorized</p>
+          </div>
+          <div className="p-4 rounded-xl bg-danger-500/5 border border-danger-500/20 text-center">
+            <p className="text-2xl font-bold text-danger-400">{usbStats.unauthorized}</p>
+            <p className="text-xs text-gray-500 mt-1">Unauthorized</p>
+          </div>
+          <div className="p-4 rounded-xl bg-base-850 border border-base-600/40 text-center">
+            <p className="text-xs font-semibold text-gray-300 truncate">{usbStats.lastDevice || 'None'}</p>
+            <p className="text-xs text-gray-500 mt-1">Last Device</p>
+          </div>
         </div>
       </div>
     </div>

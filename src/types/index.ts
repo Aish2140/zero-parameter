@@ -107,3 +107,37 @@ export interface AuthUser {
   name: string;
   email: string;
 }
+
+// ── USB Monitoring ───────────────────────────────────────────────────────────
+
+export type UsbConnectionStatus = 'Connected' | 'Disconnected';
+
+export interface UsbLogEntry {
+  id: string;
+  device_name: string;
+  device_type: string;
+  manufacturer: string | null;
+  device_id: string | null;
+  serial_number: string | null;
+  connection_time: string;
+  disconnection_time: string | null;
+  status: UsbConnectionStatus;
+  is_registered: boolean;
+  risk_score: number;
+  risk_level: RiskLevel;
+  decision: string;
+  risk_reasons: string[] | null;
+  security_alert: boolean;
+  created_at: string;
+}
+
+/** Raw device info pushed from the USB bridge server */
+export interface UsbDeviceInfo {
+  instanceId: string;     // unique Windows PnP instance ID
+  deviceName: string;
+  deviceType: string;
+  manufacturer: string;
+  deviceId: string;
+  serialNumber: string;
+  connectedAt: string;    // ISO timestamp
+}

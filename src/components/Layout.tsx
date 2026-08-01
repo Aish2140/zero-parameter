@@ -14,6 +14,7 @@ import {
   ShieldAlert,
   Brain,
   ShieldX,
+  Usb,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 
@@ -25,6 +26,7 @@ export type PageKey =
   | 'applications'
   | 'access-evaluation'
   | 'monitoring'
+  | 'usb-monitor'
   | 'logs'
   | 'ai-model';
 
@@ -44,6 +46,7 @@ const NAV_ITEMS: NavItem[] = [
   { key: 'applications', label: 'Applications', icon: AppWindow, adminOnly: true },
   { key: 'access-evaluation', label: 'Access Evaluation', icon: ShieldCheck, dividerBefore: true },
   { key: 'monitoring', label: 'Continuous Monitoring', icon: Activity },
+  { key: 'usb-monitor', label: 'USB Device Monitor', icon: Usb },
   { key: 'logs', label: 'Access Logs', icon: ScrollText },
   { key: 'ai-model', label: 'AI Risk Model', icon: Brain, adminOnly: true, dividerBefore: true },
 ];

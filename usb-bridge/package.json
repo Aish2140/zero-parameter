@@ -1,0 +1,11 @@
+{
+  "name": "usb-bridge",
+  "version": "1.0.0",
+  "description": "Local USB monitoring bridge for Zero Trust project",
+  "main": "server.js",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

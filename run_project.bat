@@ -19,6 +19,6 @@ echo.
 start http://localhost:5173
 
 :: Start the Vite server
-npm run dev
+npm run dev:full
 
 pause
